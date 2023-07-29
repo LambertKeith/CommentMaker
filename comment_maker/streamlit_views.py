@@ -1,11 +1,15 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
+from comment_maker import streamlit_views_utils as UI_utils
 
 
 
 
 def main():
+    #记录测试用例
+    if 'example' not in st.session_state:
+        st.session_state.example = ''
 
     st.set_page_config(page_title="来评语")
     # 在侧边栏中创建一个下拉列表
@@ -25,15 +29,50 @@ def main():
 
         #案例区
         examples_container = container_chat.container()
-        examples_container.write("examples_container")
-
-
+        examples_container.title("案例区")
+        #col1为案例展示区，col2为创建案例区
+        col1, col2 = examples_container.columns(2)
+        #测试案例
+        #example_list = 
+        example_list = UI_utils.read_json_keys()
+        genre = col1.radio(
+            "请选择您的测试案例",
+            example_list)
+        if genre =='非测试':
+            pass
+        else:
+            st.session_state.example = genre
+            print(st.session_state.example)
+        
+        #案例输入
+        col2_1, col2_2 = col2.columns(2)
+        with col2_1:
+            example_name = col2.text_input("案例名称")
+        with col2_2:
+            example_body = col2.text_input("具体描述")
+        #案例层按钮
+        col2_3, col2_4 = col2.columns(2)
+        if col2_3.button("添加案例"):
+            col2.write(f"Input 1: {example_name}")
+            col2.write(f"Input 2: {example_body}") 
+        if col2_4.button("删除案例") :
+            col2.write(st.session_state.example)
+              
         #描述选项区
         describe_item_container = container_chat.container()
-        describe_item_container.write("describe_item_container")
+        describe_item_container.title("通过选项生成")
+        
+
+
+        number = describe_item_container.number_input('听课状态（请点击加减打分1-5）', 
+                                                      min_value=1, 
+                                                      max_value=5, 
+                                                      step=1, 
+                                                      value=3)
+
         #描述生成区
         describe_container = container_chat.container()
-        describe_container.write("describe_container")
+        describe_container.title("describe_container")
         #评语区
         code_table = container_chat.code("it's code")
 
