@@ -1,2 +1,4 @@
 # 运行 
 streamlit run .\comment_main.py
+
+git config --global https.proxy http://127.0.0.1:7890 
