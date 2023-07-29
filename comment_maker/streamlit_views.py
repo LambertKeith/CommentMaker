@@ -80,7 +80,11 @@ def main():
                                                       max_value=5, 
                                                       step=1, 
                                                       value=3)
-            
+            number2 = describe_item_container.number_input('请为学生打分（1-5）', 
+                                                      min_value=1, 
+                                                      max_value=5, 
+                                                      step=1, 
+                                                      value=3)            
 
         #描述生成区
         describe_container = container_chat.container()
