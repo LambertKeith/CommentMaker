@@ -61,18 +61,31 @@ def main():
         #描述选项区
         describe_item_container = container_chat.container()
         describe_item_container.title("通过选项生成")
-        
 
-
-        number = describe_item_container.number_input('听课状态（请点击加减打分1-5）', 
+        #简单模式和复杂模式
+        easy_or_not = describe_item_container.radio("请选择简单模式还是复杂模式", ('简单模式', '复杂模式'))
+        if easy_or_not == '简单模式':
+            student_name = describe_item_container.text_input("学生姓名")
+            number = describe_item_container.number_input('请为学生打分（1-5）', 
                                                       min_value=1, 
                                                       max_value=5, 
                                                       step=1, 
                                                       value=3)
+        #复杂模式
+        else:
+            col_basic, col_describe1 = describe_item_container.columns(2)
+            student_name = col_basic.text_input("学生姓名")
+            number = describe_item_container.number_input('请为学生打分（1-5）', 
+                                                      min_value=1, 
+                                                      max_value=5, 
+                                                      step=1, 
+                                                      value=3)
+            
 
         #描述生成区
         describe_container = container_chat.container()
         describe_container.title("describe_container")
+        describe_container.text_area("生成的描述", '你好')
         #评语区
         code_table = container_chat.code("it's code")
 
