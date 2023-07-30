@@ -29,7 +29,7 @@ def main():
         container_chat = st.container()
         examples_or_describe = st.sidebar.radio(
             "便捷选项",
-            ("关闭","使用本地案例","使用便捷描述"), horizontal=True)
+            ("关闭", "使用本地案例", "使用便捷描述"), horizontal=True)
 
         #案例区显示
         if examples_or_describe == "使用本地案例":
@@ -72,6 +72,8 @@ def main():
             easy_or_not = describe_item_container.radio("请选择简单模式还是复杂模式", ('简单模式', '复杂模式'),horizontal=True)
             if easy_or_not == '简单模式':
                 student_name = describe_item_container.text_input("学生姓名")
+                #性别
+                sex = describe_item_container.radio('性别', ('男', '女'), horizontal=True)
                 comment_lenth = describe_item_container.radio('选择评语长度（50-200）', 
                                                             ('50', '100', '150','200'),
                                                             horizontal=True)
@@ -96,8 +98,8 @@ def main():
                 student_character = col_basic.text_input("性格")
                 #年级
                 grade = col_basic.radio('年级', ('一年级', '二年级', '三年级', '四年级', '五年级', '六年级'), horizontal=True)
-                #详细信息
                 
+                #详细信息
                 describe1 = col_describe.checkbox('是否进步')
                 describe2 = col_describe.checkbox('是否退步')
                 describe3 = col_describe.checkbox('上课专心听讲')
