@@ -5,8 +5,10 @@ from langchain import PromptTemplate, LLMChain
 from langchain.chat_models import ChatOpenAI
 import openai
 
-openai.api_key = "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"
+openai.api_key = "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"
+os.environ["OPENAI_API_KEY"] = "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"
 openai.api_base = "https://api.openai.com/v1"
+os.environ["OPENAI_API_BASE"] = "https://api.openai.com/v1"
 """ os.environ[ "OPENAI_API_KEY" ] = "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"
 os.environ["OPENAI_API_BASE"] = "https://api.openai.com/v1" """
 
