@@ -26,12 +26,12 @@ def main():
 
     #chat界面
     elif option == 'chat':
-        comment_lenth = 50
+        comment_lenth = 100
 
         container_chat = st.container()
         examples_or_describe = st.sidebar.radio(
             "便捷选项",
-            ("关闭", "使用本地案例", "使用便捷描述"), horizontal=True)
+            ("关闭", "使用本地案例", "使用辅助描述"), horizontal=True)
 
         #案例区显示
         if examples_or_describe == "使用本地案例":
@@ -82,50 +82,76 @@ def main():
             #简单模式和复杂模式
             easy_or_not = describe_item_container.radio("请选择简单模式还是复杂模式", ('简单模式', '复杂模式'),horizontal=True)
             if easy_or_not == '简单模式':
+                #姓名
                 student_name = describe_item_container.text_input("学生姓名")
+                if student_name != '': describe_info += f"学生姓名：{student_name}"
                 #性别
                 sex = describe_item_container.radio('性别', ('男', '女'), horizontal=True)
+                if sex :describe_info += f"，性别：{sex}"
+                #评语长度
                 comment_lenth = describe_item_container.radio('选择评语长度（50-200）', 
                                                             ('50', '100', '150','200'),
-                                                            horizontal=True)
-                number = describe_item_container.number_input('请为学生打分（1-5）', 
-                                                        min_value=1, 
-                                                        max_value=5, 
-                                                        step=1, 
-                                                        value=3)
+                                                            horizontal=True, index=1)
+                #打分
+                number = describe_item_container.radio('请为学生打分（1-5）',  
+                                                            (1, 2, 3, 4, 5),
+                                                            horizontal=True, index=2)
+                if number == 1:
+                    describe_info += ",最近表现不太好"
+                elif number == 2:
+                    describe_info += ",最近表现一般"
+                elif number == 3:
+                    describe_info += ",最近表现中规中矩"
+                elif number == 4:
+                    describe_info += ",最近表现比较好"
+                elif number == 5:
+                    describe_info += ",最近表现非常好"
             #复杂模式
             else:
                 col_basic, col_describe = describe_item_container.columns(2)
                 #基本信息
                 #姓名
                 student_name = col_basic.text_input("学生姓名")
+                if student_name != '': describe_info += f"学生姓名：{student_name}"
                 #长度
                 comment_lenth = col_basic.radio('选择评语长度（50-200）', 
                                                             ('50', '100', '150','200'),
-                                                            horizontal=True)
+                                                            horizontal=True, index=1)
                 #性别
                 sex = col_basic.radio('性别', ('男', '女'), horizontal=True)
+                if sex :describe_info += f"，性别：{sex}"
                 #性格
                 student_character = col_basic.text_input("性格")
+                if student_character != '':describe_info += f"，性格：{student_character}"
                 #年级
-                grade = col_basic.radio('年级', ('一年级', '二年级', '三年级', '四年级', '五年级', '六年级'), horizontal=True)
-                
+                grade = col_basic.radio('年级', ('一年级', '二年级', '三年级', '四年级', '五年级', '六年级'), 
+                                        horizontal=True)
+                describe_info += f'，年级：{grade}'
                 #详细信息
                 describe1 = col_describe.checkbox('是否进步')
+                if describe1 : describe_info += '，最近有所进步'
                 describe2 = col_describe.checkbox('是否退步')
+                if describe2 : describe_info += '，最近有所退步'
                 describe3 = col_describe.checkbox('上课专心听讲')
+                if describe3 : describe_info += '，最近上课专心听讲'
                 describe4 = col_describe.checkbox('上课开小差')
+                if describe4 : describe_info += '，最近上课开小差'
                 describe5 = col_describe.checkbox('作业认真完成')
+                if describe5 : describe_info += '，最近作业认真完成'
                 describe6 = col_describe.checkbox('作业完成一般')
+                if describe6 : describe_info += '，最近作业完成一般'
                 describe7 = col_describe.checkbox('具有创造性思维')
+                if describe7 : describe_info += '，最近具有创造性思维'
                 describe8 = col_describe.checkbox('顽皮')
+                if describe8 : describe_info += '，最近有点顽皮'
                 describe9 = col_describe.checkbox('乐于助人')
+                if describe9 : describe_info += '，最近乐于助人'
 
 
 
         #描述生成区
         describe_container = container_chat.container()
-        describe_text = describe_container.text_area("学生描述", describe_info)
+        describe_text = describe_container.text_area("学生最近表现", describe_info)
         describe2comment = describe_container.button('生成')
         text = ''
         if describe2comment:
