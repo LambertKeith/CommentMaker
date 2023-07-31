@@ -10,6 +10,7 @@ def main():
     #记录测试用例
     if 'example' not in st.session_state:
         st.session_state.example = ''
+    describe_info = ''
 
     st.set_page_config(page_title="来评语")
     # 在侧边栏中创建一个下拉列表
@@ -25,6 +26,7 @@ def main():
 
     #chat界面
     elif option == 'chat':
+        comment_lenth = 50
 
         container_chat = st.container()
         examples_or_describe = st.sidebar.radio(
@@ -47,8 +49,10 @@ def main():
             if genre =='非测试':
                 pass
             else:
-                st.session_state.example = genre
-                print(st.session_state.example)
+                #读取json
+                describe_info = UI_utils.get_value_from_json_file(genre)
+                #describe_info = 
+                
             #案例输入
             col2_1, col2_2 = col2.columns(2)
             with col2_1:
@@ -58,10 +62,17 @@ def main():
             #案例层按钮
             col2_3, col2_4 = col2.columns(2)
             if col2_3.button("添加案例"):
-                col2.write(f"Input 1: {example_name}")
-                col2.write(f"Input 2: {example_body}") 
+                if example_name not in example_list:
+                    UI_utils.add_data_to_json_file(example_name, example_name+','+example_body)
+                else:
+                    st.warning("无法添加重名案例，若想修改，可以先删除")
+                example_list = UI_utils.read_json_keys()
             if col2_4.button("删除案例") :
-                col2.write(st.session_state.example)
+                if genre != '非测试':
+                    UI_utils.remove_data_from_json_file(genre)
+                else:
+                    st.warning("无法删除默认选项")
+                example_list = UI_utils.read_json_keys()
 
         if examples_or_describe == "使用便捷描述":      
             #描述选项区
@@ -114,11 +125,16 @@ def main():
 
         #描述生成区
         describe_container = container_chat.container()
-        describe_text = describe_container.text_area("生成的描述", '你好')
+        describe_text = describe_container.text_area("学生描述", describe_info)
         describe2comment = describe_container.button('生成')
-
+        text = ''
+        if describe2comment:
+            text=UI_utils.make_comment(describe_text, comment_lenth)
         #评语区
-        code_table = container_chat.code("it's code")
+        if text == '':
+            code_table = container_chat.markdown("it's code")
+        else:
+            code_table = container_chat.markdown(text) 
 
 
     else:

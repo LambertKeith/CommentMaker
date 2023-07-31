@@ -6,7 +6,7 @@ openai.api_base = "https://api.openai.com/v1" """
 def test():
     #data = streamlit_views_utils.read_json_keys()
     #print(data)
-    langchain_chat.base_chat("写一篇关于台风的散文")
+    langchain_chat.base_chat("什么是台风")
 
 
 if __name__ == "__main__":
