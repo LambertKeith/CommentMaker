@@ -12,33 +12,29 @@ def main():
         st.session_state.example = ''
     describe_info = ''
 
-    st.set_page_config(page_title="来评语")
+    st.set_page_config(page_title="来评语", layout='wide')
     # 在侧边栏中创建一个下拉列表
     option = st.sidebar.selectbox(
         '请选择模式',
-        ('主页', 'chat', 'excel')
+        ('chat', 'excel')
     )
     
-
-    # 根据选择的选项显示不同的页面
-    if option == '主页':
-        st.write('这是主页')
-
     #chat界面
-    elif option == 'chat':
+    if option == 'chat':
         comment_lenth = 100
 
         container_chat = st.container()
         examples_or_describe = st.sidebar.radio(
             "便捷选项",
-            ("关闭", "使用本地案例", "使用辅助描述"), horizontal=True)
+            ("案例", "学生评语生成工具"), horizontal=True, index=1)
 
         #案例区显示
-        if examples_or_describe == "使用本地案例":
+        if examples_or_describe == "案例":
             
             #案例区
             examples_container = container_chat.container()
             examples_container.title("案例区")
+            examples_container.write("您可以选择以下的示例生成评语")
             #col1为案例展示区，col2为创建案例区
             col1, col2 = examples_container.columns(2)
             #测试案例
@@ -54,13 +50,14 @@ def main():
                 #describe_info = 
                 
             #案例输入
-            col2_1, col2_2 = col2.columns(2)
+            st.sidebar.write("添加自定义案例，输入名称和若干词语组成的描述")
+            col2_1, col2_2 = st.sidebar.columns(2)
             with col2_1:
-                example_name = col2.text_input("案例名称")
+                example_name = st.sidebar.text_input("案例名称")
             with col2_2:
-                example_body = col2.text_input("具体描述")
+                example_body = st.sidebar.text_input("具体描述")
             #案例层按钮
-            col2_3, col2_4 = col2.columns(2)
+            col2_3, col2_4 = st.sidebar.columns(2)
             if col2_3.button("添加案例"):
                 if example_name not in example_list:
                     UI_utils.add_data_to_json_file(example_name, example_name+','+example_body)
@@ -74,13 +71,16 @@ def main():
                     st.warning("无法删除默认选项")
                 example_list = UI_utils.read_json_keys()
 
-        if examples_or_describe == "使用辅助描述":      
+        if examples_or_describe == "学生评语生成工具":      
             #描述选项区
             describe_item_container = container_chat.container()
-            describe_item_container.title("辅助描述")
+            describe_item_container.title("学生评语生成工具")
 
             #简单模式和复杂模式
+            describe_item_container.title('简单&复杂',)
             easy_or_not = describe_item_container.radio("请选择简单模式还是复杂模式", ('简单模式', '复杂模式'),horizontal=True)
+            #describe_item_container.title('评语调色盘')
+            describe_item_container.write("为您的评语添加个性化内容")
             if easy_or_not == '简单模式':
                 #姓名
                 student_name = describe_item_container.text_input("学生姓名")
@@ -112,7 +112,7 @@ def main():
                 #基本信息
                 #姓名
                 student_name = col_basic.text_input("学生姓名")
-                if student_name != '': describe_info += f"学生姓名：{student_name}"
+                if student_name != '' and UI_utils.is_valid_student_name(student_name): describe_info += f"学生姓名：{student_name}"
                 #长度
                 comment_lenth = col_basic.radio('选择评语长度（50-200）', 
                                                             ('50', '100', '150','200'),
@@ -121,36 +121,54 @@ def main():
                 sex = col_basic.radio('性别', ('男', '女'), horizontal=True)
                 if sex :describe_info += f"，性别：{sex}"
                 #性格
-                student_character = col_basic.text_input("性格")
+                #性格列表
+                personality_traits = [
+                    "好奇心旺盛",
+                    "热情活泼",
+                    "快乐友善",
+                    "独立自主",
+                    "乐于助人",
+                    "坚持努力",
+                    "喜欢学习",
+                    "善于合作",
+                    "有创造力",
+                    "喜欢表达",
+                    "有耐心",
+                    "喜欢挑战",
+                    "坦率直言",
+                    "爱幻想",
+                    "坚持正义"
+                ]
+                student_character = col_basic.multiselect("性格", personality_traits)
                 if student_character != '':describe_info += f"，性格：{student_character}"
+
                 #年级
                 grade = col_basic.radio('年级', ('一年级', '二年级', '三年级', '四年级', '五年级', '六年级'), 
                                         horizontal=True)
                 describe_info += f'，年级：{grade}'
                 #详细信息
                 describe1 = col_describe.checkbox('是否进步')
-                if describe1 : describe_info += '，最近有所进步'
+                if describe1 : describe_info += '，有所进步'
                 describe2 = col_describe.checkbox('是否退步')
-                if describe2 : describe_info += '，最近有所退步'
+                if describe2 : describe_info += '，有所退步'
                 describe3 = col_describe.checkbox('上课专心听讲')
-                if describe3 : describe_info += '，最近上课专心听讲'
+                if describe3 : describe_info += '，上课专心听讲'
                 describe4 = col_describe.checkbox('上课开小差')
-                if describe4 : describe_info += '，最近上课开小差'
+                if describe4 : describe_info += '，上课开小差'
                 describe5 = col_describe.checkbox('作业认真完成')
-                if describe5 : describe_info += '，最近作业认真完成'
+                if describe5 : describe_info += '，作业认真完成'
                 describe6 = col_describe.checkbox('作业完成一般')
-                if describe6 : describe_info += '，最近作业完成一般'
+                if describe6 : describe_info += '，作业完成一般'
                 describe7 = col_describe.checkbox('具有创造性思维')
-                if describe7 : describe_info += '，最近具有创造性思维'
+                if describe7 : describe_info += '，具有创造性思维'
                 describe8 = col_describe.checkbox('顽皮')
-                if describe8 : describe_info += '，最近有点顽皮'
+                if describe8 : describe_info += '，有点顽皮'
                 describe9 = col_describe.checkbox('乐于助人')
-                if describe9 : describe_info += '，最近乐于助人'
-
-
+                if describe9 : describe_info += '，乐于助人'
 
         #描述生成区
         describe_container = container_chat.container()
+        describe_container.title('评语区')
         describe_text = describe_container.text_area("学生最近表现", describe_info)
         describe2comment = describe_container.button('生成')
         text = ''

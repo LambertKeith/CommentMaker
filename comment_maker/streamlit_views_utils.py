@@ -1,5 +1,6 @@
 import os
 import json
+import re
 from .langchain_chat import base_chat
 
 
@@ -70,3 +71,11 @@ def remove_data_from_json_file(key_to_remove, json_file_path="data/example.json"
     # 将更新后的数据写回文件
     with open(json_file_path, 'w') as file:
         json.dump(data, file, indent=4)
+
+
+#检查名字输入格式
+def is_valid_student_name(name):
+    # 使用正则表达式检查学生姓名格式
+    # 姓名只能包含中文字符
+    pattern = r'^[\u4e00-\u9fa5]+$'
+    return re.match(pattern, name)
