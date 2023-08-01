@@ -14,11 +14,11 @@ os.environ["OPENAI_API_BASE"] = "https://api.openai.com/v1"
 """ os.environ[ "OPENAI_API_KEY" ] = "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"
 os.environ["OPENAI_API_BASE"] = "https://api.openai.com/v1" """
 #设置本地代理地址
-os.environ["http_proxy"] = "http://localhost:7890"
-os.environ["https_proxy"] = "http://localhost:7890"
+'''os.environ["http_proxy"] = "http://localhost:7890"
+os.environ["https_proxy"] = "http://localhost:7890"'''
 #@st.cache_resource 
 def load_config():
-    file = open("config/chat_config2.yaml", 'r', encoding="utf-8")
+    file = open("config/chat_config.yaml", 'r', encoding="utf-8")
     file_data = file.read()
     file.close()
 

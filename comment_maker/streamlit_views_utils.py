@@ -34,7 +34,7 @@ def make_comment(describe, wordCount=150):
 
 #提示词：请你编写一个python函数，读取路径为data\example.json的json文件，根据键返回指定值
 #读取描述json
-def get_value_from_json_file(key, json_file_path="data\example.json"):
+def get_value_from_json_file(key, json_file_path="data/example.json"):
     with open(json_file_path, 'r', encoding='utf-8') as file:
         data = json.load(file)
 
@@ -43,7 +43,7 @@ def get_value_from_json_file(key, json_file_path="data\example.json"):
 
 #提示词：请你编写一个python函数，根据传入的键和值在路径为data\example.json的json文件中增加一条
 #增加示例
-def add_data_to_json_file(key, value, json_file_path="data\example.json"):
+def add_data_to_json_file(key, value, json_file_path="data/example.json"):
     # 读取现有的 JSON 数据
     with open(json_file_path, 'r', encoding='utf-8') as file:
         data = json.load(file)
@@ -58,7 +58,7 @@ def add_data_to_json_file(key, value, json_file_path="data\example.json"):
 
 #
 #删除示例
-def remove_data_from_json_file(key_to_remove, json_file_path="data\example.json"):
+def remove_data_from_json_file(key_to_remove, json_file_path="data/example.json"):
     # 读取现有的 JSON 数据
     with open(json_file_path, 'r') as file:
         data = json.load(file)

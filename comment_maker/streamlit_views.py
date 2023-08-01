@@ -74,10 +74,10 @@ def main():
                     st.warning("无法删除默认选项")
                 example_list = UI_utils.read_json_keys()
 
-        if examples_or_describe == "使用便捷描述":      
+        if examples_or_describe == "使用辅助描述":      
             #描述选项区
             describe_item_container = container_chat.container()
-            describe_item_container.title("便捷描述")
+            describe_item_container.title("辅助描述")
 
             #简单模式和复杂模式
             easy_or_not = describe_item_container.radio("请选择简单模式还是复杂模式", ('简单模式', '复杂模式'),horizontal=True)
