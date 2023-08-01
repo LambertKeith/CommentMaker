@@ -14,6 +14,7 @@ def main():
 
     st.set_page_config(page_title="来评语", layout='wide')
     # 在侧边栏中创建一个下拉列表
+    st.sidebar.title("学生评语生成工具")
     option = st.sidebar.selectbox(
         '请选择模式',
         ('chat', 'excel')
@@ -74,7 +75,7 @@ def main():
         if examples_or_describe == "学生评语生成工具":      
             #描述选项区
             describe_item_container = container_chat.container()
-            describe_item_container.title("学生评语生成工具")
+            
 
             #简单模式和复杂模式
             describe_item_container.title('简单&复杂',)
@@ -108,63 +109,33 @@ def main():
                     describe_info += ",最近表现非常好"
             #复杂模式
             else:
-                col_basic, col_describe = describe_item_container.columns(2)
+
                 #基本信息
                 #姓名
-                student_name = col_basic.text_input("学生姓名")
+                student_name = describe_item_container.text_input("学生姓名")
                 if student_name != '' and UI_utils.is_valid_student_name(student_name): describe_info += f"学生姓名：{student_name}"
                 #长度
-                comment_lenth = col_basic.radio('选择评语长度（50-200）', 
+                comment_lenth = describe_item_container.radio('选择评语长度（50-200）', 
                                                             ('50', '100', '150','200'),
                                                             horizontal=True, index=1)
                 #性别
-                sex = col_basic.radio('性别', ('男', '女'), horizontal=True)
+                sex = describe_item_container.radio('性别', ('男', '女'), horizontal=True)
                 if sex :describe_info += f"，性别：{sex}"
                 #性格
                 #性格列表
                 personality_traits = [
-                    "好奇心旺盛",
-                    "热情活泼",
-                    "快乐友善",
-                    "独立自主",
-                    "乐于助人",
-                    "坚持努力",
-                    "喜欢学习",
-                    "善于合作",
-                    "有创造力",
-                    "喜欢表达",
-                    "有耐心",
-                    "喜欢挑战",
-                    "坦率直言",
-                    "爱幻想",
-                    "坚持正义"
+                    "好奇心旺盛", "热情活泼","快乐友善","独立自主","乐于助人","坚持努力","喜欢学习","善于合作","有创造力",
+                    "喜欢表达","有耐心","喜欢挑战","坦率直言","爱幻想","坚持正义",'是否进步','是否退步','上课专心听讲','上课开小差',
+                    '作业认真完成','作业完成一般','具有创造性思维','顽皮','乐于助人'
                 ]
-                student_character = col_basic.multiselect("性格", personality_traits)
-                if student_character != '':describe_info += f"，性格：{student_character}"
+                student_character = describe_item_container.multiselect("标签(可多选)", personality_traits)
+                if student_character != '':describe_info += f"，其他描述：{student_character}"
 
                 #年级
-                grade = col_basic.radio('年级', ('一年级', '二年级', '三年级', '四年级', '五年级', '六年级'), 
+                grade = describe_item_container.radio('年级', ('一年级', '二年级', '三年级', '四年级', '五年级', '六年级'), 
                                         horizontal=True)
                 describe_info += f'，年级：{grade}'
-                #详细信息
-                describe1 = col_describe.checkbox('是否进步')
-                if describe1 : describe_info += '，有所进步'
-                describe2 = col_describe.checkbox('是否退步')
-                if describe2 : describe_info += '，有所退步'
-                describe3 = col_describe.checkbox('上课专心听讲')
-                if describe3 : describe_info += '，上课专心听讲'
-                describe4 = col_describe.checkbox('上课开小差')
-                if describe4 : describe_info += '，上课开小差'
-                describe5 = col_describe.checkbox('作业认真完成')
-                if describe5 : describe_info += '，作业认真完成'
-                describe6 = col_describe.checkbox('作业完成一般')
-                if describe6 : describe_info += '，作业完成一般'
-                describe7 = col_describe.checkbox('具有创造性思维')
-                if describe7 : describe_info += '，具有创造性思维'
-                describe8 = col_describe.checkbox('顽皮')
-                if describe8 : describe_info += '，有点顽皮'
-                describe9 = col_describe.checkbox('乐于助人')
-                if describe9 : describe_info += '，乐于助人'
+
 
         #描述生成区
         describe_container = container_chat.container()
