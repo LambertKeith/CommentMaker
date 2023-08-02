@@ -1,0 +1,26 @@
+app_id: 9cc6e67e656ea8a09d5c1c40709d995ace0d8dd3093d98f3361c289eeeb20c01
+uvicorn api_main:app --reload
+uvicorn api_main:app --host=0.0.0.0 --port=12242
+streamlit run --server.baseUrlPath "/app/9cc6e67e656ea8a09d5c1c40709d995ace0d8dd3093d98f3361c289eeeb20c01/" api_main.py
+
+streamlit run --server.baseUrlPath "/app/9cc6e67e656ea8a09d5c1c40709d995ace0d8dd3093d98f3361c289eeeb20c01/" --browser.gatherUsageStats false --server.address 0.0.0.0  --server.port 12242 api_main.py
+
+
+
+
+
+location /app/9cc6e67e656ea8a09d5c1c40709d995ace0d8dd3093d98f3361c289eeeb20c01/ {
+    proxy_buffer_size 4024k;
+    proxy_buffers 16 4024k;
+    proxy_busy_buffers_size 4048k;
+    proxy_temp_file_write_size 4048k;
+    client_body_buffer_size 16000k;
+    client_max_body_size 16000k;
+    proxy_http_version 1.1; 
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header Host $host;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection "upgrade";
+    proxy_read_timeout 86400;
+    proxy_pass http://localhost:12242/app/9cc6e67e656ea8a09d5c1c40709d995ace0d8dd3093d98f3361c289eeeb20c01/;    
+}
