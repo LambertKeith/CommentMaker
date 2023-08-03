@@ -1,13 +1,9 @@
 app_id: 9cc6e67e656ea8a09d5c1c40709d995ace0d8dd3093d98f3361c289eeeb20c01
 uvicorn api_main:app --reload
 uvicorn api_main:app --host=0.0.0.0 --port=12242
-streamlit run --server.baseUrlPath "/app/9cc6e67e656ea8a09d5c1c40709d995ace0d8dd3093d98f3361c289eeeb20c01/" api_main.py
+streamlit run --server.baseUrlPath "/app/9cc6e67e656ea8a09d5c1c40709d995ace0d8dd3093d98f3361c289eeeb20c01/" comment_main.py
 
-streamlit run --server.baseUrlPath "/app/9cc6e67e656ea8a09d5c1c40709d995ace0d8dd3093d98f3361c289eeeb20c01/" --browser.gatherUsageStats false --server.address 0.0.0.0  --server.port 12242 api_main.py
-
-
-
-
+streamlit run --server.baseUrlPath "/app/9cc6e67e656ea8a09d5c1c40709d995ace0d8dd3093d98f3361c289eeeb20c01/" --browser.gatherUsageStats false --server.address 0.0.0.0  --server.port 12242 comment_main.py
 
 location /app/9cc6e67e656ea8a09d5c1c40709d995ace0d8dd3093d98f3361c289eeeb20c01/ {
     proxy_buffer_size 4024k;

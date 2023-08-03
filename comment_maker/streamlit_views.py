@@ -30,6 +30,7 @@ def main():
             ("案例", "学生评语生成工具"), horizontal=True, index=1)
 
         #案例区显示
+        student_name = ''
         if examples_or_describe == "案例":
             
             #案例区
@@ -61,11 +62,17 @@ def main():
             col2_3, col2_4 = st.sidebar.columns(2)
             if col2_3.button("添加案例"):
                 if example_name not in example_list:
-                    UI_utils.add_data_to_json_file(example_name, example_name+','+example_body)
+                    if example_name != '':
+                        if example_body != '':
+                            UI_utils.add_data_to_json_file(example_name, example_name+','+example_body)
+                        else:
+                            st.warning("请输入案例描述")
+                    else:
+                        st.warning("请输入案例名称")
                 else:
                     st.warning("无法添加重名案例，若想修改，可以先删除")
                 example_list = UI_utils.read_json_keys()
-            if col2_4.button("删除案例") :
+            if col1.button("删除案例") :
                 if genre != '非测试':
                     UI_utils.remove_data_from_json_file(genre)
                 else:
@@ -85,10 +92,12 @@ def main():
             if easy_or_not == '简单模式':
                 #姓名
                 student_name = describe_item_container.text_input("学生姓名")
-                if student_name != '': describe_info += f"学生姓名：{student_name}"
+                #if student_name != '': describe_info += f"学生姓名：{student_name}"
+                if student_name != '' and UI_utils.is_valid_student_name(student_name): 
+                    describe_info += f"学生姓名：{student_name}"
                 #性别
                 sex = describe_item_container.radio('性别', ('男', '女'), horizontal=True)
-                if sex :describe_info += f"，性别：{sex}"
+                if sex :describe_info += f"\n性别：{sex}"
                 #评语长度
                 comment_lenth = describe_item_container.radio('选择评语长度（50-200）', 
                                                             ('50', '100', '150','200'),
@@ -98,56 +107,64 @@ def main():
                                                             (1, 2, 3, 4, 5),
                                                             horizontal=True, index=2)
                 if number == 1:
-                    describe_info += ",最近表现不太好"
+                    describe_info += "\n表现不太好"
                 elif number == 2:
-                    describe_info += ",最近表现一般"
+                    describe_info += "\n表现一般"
                 elif number == 3:
-                    describe_info += ",最近表现中规中矩"
+                    describe_info += "\n表现中规中矩"
                 elif number == 4:
-                    describe_info += ",最近表现比较好"
+                    describe_info += "\n表现比较好"
                 elif number == 5:
-                    describe_info += ",最近表现非常好"
+                    describe_info += "\n表现非常好"
             #复杂模式
             else:
 
                 #基本信息
                 #姓名
                 student_name = describe_item_container.text_input("学生姓名")
-                if student_name != '' and UI_utils.is_valid_student_name(student_name): describe_info += f"学生姓名：{student_name}"
+                if student_name != '' and UI_utils.is_valid_student_name(student_name): 
+                    describe_info += f"学生姓名：{student_name}"
+
                 #长度
                 comment_lenth = describe_item_container.radio('选择评语长度（50-200）', 
                                                             ('50', '100', '150','200'),
                                                             horizontal=True, index=1)
                 #性别
                 sex = describe_item_container.radio('性别', ('男', '女'), horizontal=True)
-                if sex :describe_info += f"，性别：{sex}"
+                if sex :describe_info += f"\n性别：{sex}"
                 #性格
                 #性格列表
                 personality_traits = [
                     "好奇心旺盛", "热情活泼","快乐友善","独立自主","乐于助人","坚持努力","喜欢学习","善于合作","有创造力",
-                    "喜欢表达","有耐心","喜欢挑战","坦率直言","爱幻想","坚持正义",'是否进步','是否退步','上课专心听讲','上课开小差',
+                    "喜欢表达","有耐心","喜欢挑战","坦率直言","爱幻想","坚持正义",'进步','退步','上课专心听讲','上课开小差',
                     '作业认真完成','作业完成一般','具有创造性思维','顽皮','乐于助人'
                 ]
                 student_character = describe_item_container.multiselect("标签(可多选)", personality_traits)
-                if student_character != '':describe_info += f"，其他描述：{student_character}"
+                if student_character != '':describe_info += f"\n其他描述：{student_character}"
 
                 #年级
                 grade = describe_item_container.radio('年级', ('一年级', '二年级', '三年级', '四年级', '五年级', '六年级'), 
                                         horizontal=True)
-                describe_info += f'，年级：{grade}'
+                describe_info += f'\n年级：{grade}'
 
 
         #描述生成区
         describe_container = container_chat.container()
         describe_container.title('评语区')
-        describe_text = describe_container.text_area("学生最近表现", describe_info)
+        describe_text = describe_container.text_area("学生最近表现", describe_info, height=150)
         describe2comment = describe_container.button('生成')
         text = ''
         if describe2comment:
-            text=UI_utils.make_comment(describe_text, comment_lenth)
+            if student_name != '' and UI_utils.is_valid_student_name(student_name): 
+                text=UI_utils.make_comment(describe_text, comment_lenth)
+            elif examples_or_describe == "案例":
+                text=UI_utils.make_comment(describe_text, comment_lenth)
+            else:
+                st.warning("请输入正确的名字")
+            #text=UI_utils.make_comment(describe_text, comment_lenth)
         #评语区
         if text == '':
-            code_table = container_chat.markdown("it's code")
+            code_table = container_chat.markdown("")
         else:
             code_table = container_chat.markdown(text) 
 
