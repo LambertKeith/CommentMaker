@@ -180,7 +180,7 @@ def main():
                 return '\n'.join(input_string[i:i+n] for i in range(0, len(input_string), n))
 
             code_table = container_chat.markdown(text) 
-            
+             
 
 
     else:
