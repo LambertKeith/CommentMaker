@@ -8,6 +8,7 @@ def test():
     #print(data)
     langchain_chat.base_chat("什么是台风")
 
-
+def test1():
+    print(streamlit_views_utils.select_random_values([1,2,3,4,5,6,7,8,9,0,435,7568,23,235]))
 if __name__ == "__main__":
-    test()
+    test1()

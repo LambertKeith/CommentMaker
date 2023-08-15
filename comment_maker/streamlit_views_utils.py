@@ -1,5 +1,6 @@
 import os
 import json
+import random
 import re
 from .langchain_chat import base_chat
 
@@ -79,3 +80,43 @@ def is_valid_student_name(name):
     # 姓名只能包含中文字符
     pattern = r'^[\u4e00-\u9fa5]+$'
     return re.match(pattern, name)
+
+import traceback
+#---获取得分对应的描述---
+
+def choose_discribe_from_json(key):
+    #读取指定键的值
+    def read_score_to_discribe_value(key, json_file_path='data/score_to_discribe.json'):
+        print(key)
+        try:
+            with open(json_file_path, "r", encoding='utf-8') as json_file:
+                data = json.load(json_file)
+                if key in data:
+                    return data[key]
+                else:
+                    #键不存在
+                    return []
+        except Exception as e:
+            traceback.print_exc(e)
+            return False
+        
+    #从列表中随机选选择几个项目
+    def select_random_values(input_list, num_values=4):
+        if input_list:
+            if num_values < len(input_list):
+                random_values = random.sample(input_list, num_values)
+                return random_values
+    
+    disc_list = []
+    str_disc = '\n'
+    disc_list = read_score_to_discribe_value(key)
+
+    if disc_list != []:
+        select_list = select_random_values(disc_list)
+        for i in select_list:
+            i += ' '
+            str_disc += i
+        return str_disc
+
+
+

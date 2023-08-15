@@ -50,9 +50,9 @@ if __name__ == "__main__":
     version_info = write_version_to_file()
     
     directories = ['comment_maker', 'config', 'data']  # Replace with your list of directories to be included in the zip
-    files = ["version.txt", "deploy.txt","start_app_comment_maker.sh","comment_main.py","README.md", 'data_info.txt']      # Replace with your list of files to be included in the zip
+    files = ["version.txt", "deploy.txt","start_app_comment_maker.sh","comment_main.py","README.md", 'data_info.txt', 'cmd.txt']      # Replace with your list of files to be included in the zip
     target_zip_path = "app_comment_maker.zip"  # Replace with the desired output zip file path        
     
     create_zip(target_zip_path, directories, files) 
     
-    shutil.copy(target_zip_path, f"dist/app_creator_{version_info}.zip")
+    shutil.copy(target_zip_path, f"dist/app_comment_maker_{version_info}.zip")
